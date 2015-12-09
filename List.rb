@@ -9,6 +9,7 @@ class Node
 end
 
 class List_Beats
+  include Enumerable
   attr_accessor :voice, :speed
 
   def initialize(data)
@@ -23,7 +24,29 @@ class List_Beats
       append(word)    
     end
   end
-  
+=begin  
+  def each
+    if @count
+      words = all_to_str.split
+      for word in words
+        yield word
+      end
+    end
+  end
+=end
+
+  def each
+    if !@head.nil?                     #if head is nil, the new_list will be the linked list
+      current = @head
+      while current.next_node != nil    #go to the last Node in the list
+         yield current.data
+         current = current.next_node
+      end
+      yield current.data
+
+    end
+  end
+=begin  
   def count
     @count = 0
     current = @head
@@ -38,7 +61,7 @@ class List_Beats
       puts @count
     end
   end
-
+=end
   #takes a string and converts it into a list
   def string_to_list(str)
     first_node = last_node = current = nil
@@ -151,6 +174,7 @@ class List_Beats
     str = all_to_str
     puts str
   end
+
 end
 
 #list = List_Beats.new("Mississippi")
@@ -162,6 +186,8 @@ list.prepend("oh")
 list.pop(1)
 #list.prepend("chow knee Mississippi ma")
 list.play
-
+list.find
+sorted = list.sort_by { |word| word.length }  #sort by word length
+puts sorted.inspect
 list.all
-list.count
+puts list.count
