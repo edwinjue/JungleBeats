@@ -1,19 +1,20 @@
 class Node
+  attr_accessor :data, :next_node
 
-attr_accessor :data, :next_node
+  def initialize(data, next_up)
+    @data = data
+    @next_node = next_up
 
-    def initialize(data, next_up)
-      @data = data
-      @next_node = next_up
-
-    end
-
+  end
 end
 
 class List_Beats
+  attr_accessor :voice, :speed
 
   def initialize(data)
-    count = 0
+    @count = 0
+    @voice = 'Boing'
+    @speed = 500
     words = data.to_s.split
 
     @validBeats = %W{tee ah dee i deep ya bop boop yo la chow ni ma da na ding oom gai bah knee bang oh uh ha yes}
@@ -21,23 +22,20 @@ class List_Beats
     for word in words
       append(word)    
     end
-    @voice = 'Boing'
-    @speed = 500
-    
   end
   
   def count
-    tally = 0
+    @count = 0
     current = @head
     if current.nil?
       0
     else
       while current.next_node != nil
-        tally += 1
+        @count += 1
         current = current.next_node
       end 
-      tally +=1
-      puts tally
+      @count +=1
+      puts @count
     end
   end
 
@@ -54,15 +52,14 @@ class List_Beats
           last_node = current.next_node = Node.new(word,nil)    #keep track of the last node in new list when adding more items
           current = current.next_node                           #increment current position to point to new node in the list
         end
+        @count += 1
       end
     end
 
     first_node.nil? ? nil : first_node   #return nil if no valid words were processed, otherwise, return first node of the newly created list
-
   end
 
-  def append(add_end)
-    
+  def append(add_end)  
     new_list = string_to_list(add_end)  #create a new list with the words in add_end    
 
     if @head.nil?                     #if head is nil, the new_list will be the linked list
@@ -79,7 +76,6 @@ class List_Beats
   end
 
   def prepend(add_begining)
-    
     new_list = string_to_list(add_begining) #create a new list with the words in add_begining    
 
     if @head.nil?                         #if head is nil, the new_list will be the linked list
@@ -97,6 +93,24 @@ class List_Beats
 
     self  #return current list
 
+  end
+
+  def pop(numToPop)
+    current = @head
+    if numToPop > @count  #return nil if trying to pop more nodes than are in list
+      puts "numToPop > @count"
+      nil
+    else
+      numExisting = @count - numToPop
+      if numExisting == 0
+        @head = nil
+      else
+        (numExisting-1).times do
+          current = current.next_node
+        end
+        current.next_node = nil
+      end
+    end
   end
 
   def play
@@ -117,21 +131,20 @@ class List_Beats
     @validBeats.include?lowercase_input
   end
 
-  
-
   def all_to_str
- 
     str = ''
 
     # Traverse through the list till you hit the "nil" at the end
     current = @head
-    
-    while current.next_node != nil
-      str += current.data.to_s + " "    
-      current = current.next_node
+    if current.nil?
+      str
+    else
+      while current.next_node != nil
+        str += current.data.to_s + " "    
+        current = current.next_node
+      end
+      str += current.data.to_s    
     end
-    str += current.data.to_s
-    
   end
 
   def all
@@ -146,7 +159,7 @@ list = List_Beats.new("Miss I upp all baNG iss yO iPp MA ads ha fewa HA")
 list.append("cHOw kneE Mississippi Ma")
 list.prepend("yES")
 list.prepend("oh")
-
+list.pop(1)
 #list.prepend("chow knee Mississippi ma")
 list.play
 
