@@ -130,18 +130,8 @@ class List_Beats
 
   def all_to_str
     str = ''
-
-    # Traverse through the list till you hit the "nil" at the end
-    current = @head
-    if current.nil?
-      str
-    else
-      while current.next_node != nil
-        str += current.data.to_s + " "    
-        current = current.next_node
-      end
-      str += current.data.to_s    
-    end
+    all?{ |word| str += "#{word} " }
+    str
   end
 
   def all
