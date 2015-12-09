@@ -12,10 +12,12 @@ class List_Beats
   attr_accessor :voice, :speed
 
   VALIDBEATS = %W{tee ah dee i deep ya bop boop yo la chow ni ma da na ding oom gai bah knee bang oh uh ha yes}
+  DEFAULT_VOICE = 'Boing'
+  DEFAULT_SPEED = 500
 
   def initialize(data)
-    @voice = 'Boing'
-    @speed = 500
+    @voice = DEFAULT_VOICE
+    @speed = DEFAULT_SPEED
     @head = nil
     append(data)
   end
@@ -37,7 +39,7 @@ class List_Beats
     first_node = last_node = current = nil
 
     words = str.to_s.split  #convert string to an array of words  
-    for word in words       
+    words.each do |word|
       if validate(word)     #process only valid words
         if first_node.nil?
           last_node = first_node = current = Node.new(word.to_s.downcase,nil) #when list has only 1 item, the first and last node will be the same
@@ -114,6 +116,14 @@ class List_Beats
     end
   end
 
+  def reset_voice
+    @voice = DEFAULT_VOICE
+  end
+
+  def reset_speed
+    @speed = DEFAULT_SPEED
+  end
+
   def validate(input)
     lowercase_input = input.to_s.downcase    
     VALIDBEATS.include?lowercase_input
@@ -121,8 +131,10 @@ class List_Beats
 
   def all_to_str
     str = ''
-    all?{ |word| str += "#{word} " }  #make use of all? enumerable method
-    str
+    map do |w|
+      str += "#{w} "
+    end
+    str.strip         #strip to remove excess whitespace
   end
 
   def all
@@ -146,7 +158,9 @@ list.prepend("oh")
 list.pop(1)
 #list.prepend("chow knee Mississippi ma")
 list.play
-sorted = list.sort_by { |word| word.length }  #use enumerable method sort_by to sort by word length
+sorted = list.sort_by do |word| 
+  word.length  #use enumerable method sort_by to sort by word length
+end
 puts sorted.inspect
 result = list.find("kee") ? "kee is" : "kee isn't" 
 puts 'list.find("kee") = ' + result #should output "kee isn't"
