@@ -12,66 +12,60 @@ end
 
 class List_Beats
 
-def initialize(data)
-  count = 0
-  words = data.to_s.split
+  def initialize(data)
+    count = 0
+    words = data.to_s.split
 
-  @validBeats = %W{tee ah dee i deep ya bop boop yo la chow ni ma da na ding oom gai bah knee bang oh uh ha yes}
-  @head = nil
-  for word in words
-    append(word)    
+    @validBeats = %W{tee ah dee i deep ya bop boop yo la chow ni ma da na ding oom gai bah knee bang oh uh ha yes}
+    @head = nil
+    for word in words
+      append(word)    
+    end
+    @voice = 'Boing'
+    @speed = 500
+    
   end
-  @voice = 'Boing'
-  @speed = 500
-  
-end
   
   def count
     tally = 0
     current = @head
-    if(current == nil)
+    if current.nil?
       0
+    else
+      while current.next_node != nil
+        tally += 1
+        current = current.next_node
+      end 
+      tally +=1
+      puts tally
     end
-    while current.next_node != nil
-      tally += 1
-      current = current.next_node
-    end 
-    tally +=1
-    puts tally
   end
 
   #takes a string and converts it into a list
   def string_to_list(str)
-    count = 0
-    first_node = nil
-    last_node = nil
-    current = nil
+    first_node = last_node = current = nil
 
     words = str.to_s.split  #convert string to an array of words  
     for word in words       
       if validate(word)     #process only valid words
-        if count == 0
+        if first_node.nil?
           last_node = first_node = current = Node.new(word,nil) #when list has only 1 item, the first and last node will be the same
         else
           last_node = current.next_node = Node.new(word,nil)    #keep track of the last node in new list when adding more items
           current = current.next_node                           #increment current position to point to new node in the list
         end
-        count += 1      
       end
     end
 
-    if count == 0
-      nil           #return nil if no valid words were processed
-    else
-        first_node  #otherwise, return first node of the newly created list
-    end
+    first_node.nil? ? nil : first_node   #return nil if no valid words were processed, otherwise, return first node of the newly created list
+
   end
 
   def append(add_end)
     
     new_list = string_to_list(add_end)  #create a new list with the words in add_end    
 
-    if @head == nil                     #if head is nil, the new_list will be the linked list
+    if @head.nil?                     #if head is nil, the new_list will be the linked list
       @head = new_list  
     else
       current = @head
@@ -88,7 +82,7 @@ end
     
     new_list = string_to_list(add_begining) #create a new list with the words in add_begining    
 
-    if @head == nil                         #if head is nil, the new_list will be the linked list
+    if @head.nil?                         #if head is nil, the new_list will be the linked list
       @head = new_list  
     else
       current = new_list                    #go to end of new list
@@ -122,6 +116,8 @@ end
     lowercase_input = input.to_s.downcase
     @validBeats.include?lowercase_input
   end
+
+  
 
   def all_to_str
  
