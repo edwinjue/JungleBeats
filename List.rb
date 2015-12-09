@@ -4,7 +4,6 @@ class Node
   def initialize(data, next_up)
     @data = data
     @next_node = next_up
-
   end
 end
 
@@ -17,11 +16,8 @@ class List_Beats
   def initialize(data)
     @voice = 'Boing'
     @speed = 500
-    words = data.to_s.split
     @head = nil
-    for word in words
-      append(word)    
-    end
+    append(data)
   end
 
   def each
