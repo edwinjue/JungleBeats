@@ -24,9 +24,9 @@ class List_Beats
   end
 
   def each
-    if !@head.nil?                     #if head is nil, the new_list will be the linked list
+    if !@head.nil?                     #if head is not nil we have a list and can interate. simply iterate and yield data from each node
       current = @head
-      while current.next_node != nil    #go to the last Node in the list
+      while current.next_node != nil    
          yield current.data
          current = current.next_node
       end
