@@ -64,8 +64,6 @@ class List_Beats
       end
       current.next_node = new_list      #append new list to the existing linked list
     end
-
-    self                                #return the linked list
   end
 
   def prepend(add_begining)
@@ -83,9 +81,6 @@ class List_Beats
       
       @head = new_list                      #update the head of the existing linked list to point to first node of prepended list 
     end
-
-    self  #return current list
-
   end
 
   def pop(numToPop)
