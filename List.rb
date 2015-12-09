@@ -11,7 +11,8 @@ class List_Beats
   include Enumerable
   attr_accessor :voice, :speed
 
-  VALIDBEATS = %W{tee ah dee i deep ya bop boop yo la chow ni ma da na ding oom gai bah knee bang oh uh ha yes}
+  VALIDBEATS = %W{tee ah dee i deep ya bop boop yo la chow ni ma da na ding oom gai bah knee how bang oh uh ha yes}
+  VALIDVOICES = %W{Alice Boing}
   DEFAULT_VOICE = 'Boing'
   DEFAULT_SPEED = 500
 
@@ -46,8 +47,7 @@ class List_Beats
         else
           last_node = current.next_node = Node.new(word.to_s.downcase,nil)    #keep track of the last node in new list when adding more items
           current = current.next_node                           #increment current position to point to new node in the list
-        end
-        
+        end  
       end
     end
 
@@ -85,10 +85,26 @@ class List_Beats
     end
   end
 
+  def insert(index,add_words)
+    if index >= count
+      puts "Inserting \'#{add_words}\' to the end of list"
+      append(add_words)
+    elsif index <= 0
+      puts "Inserting \'#{add_words}\' to the beginning of list"  
+      prepend(add_words)
+    else
+      #insert between nodes (simply reconstruct list)
+      ar = to_a
+      ar.insert(index,add_words)
+      clear_list
+      append(ar.join(' '))
+    end
+  end
+
   def pop(numToPop)
     current = @head
     if numToPop > count  #return nil if trying to pop more nodes than are in list
-      puts "numToPop > count"
+      puts "Error: you are trying to call pop more times than nodes exist. 0 nodes popped."
       nil
     else
       numExisting = count - numToPop
@@ -105,14 +121,13 @@ class List_Beats
 
   def play
     str = all_to_str
-    speed = @speed
-    voice = @voice
-
-    if(str != '')
-#      sayWithSpeedAndVoice = "say -r #{speed} -v #{voice} \"#{str}\""
-#      `#{sayWithSpeedAndVoice}`
-      sayCmd = "say \"#{str}\""
-      `#{sayCmd}`
+    if str
+      sayWithSpeedAndVoice = "say -r #{@speed} -v #{@voice} \"#{str}\""
+#     puts sayWithSpeedAndVoice
+      `#{sayWithSpeedAndVoice}`
+      
+#     sayCmd = "say \"#{str}\""
+#     `#{sayCmd}`
     end
   end
 
@@ -130,45 +145,48 @@ class List_Beats
   end
 
   def all_to_str
-    str = ''
-    map do |w|
-      str += "#{w} "
-    end
-    str.strip         #strip to remove excess whitespace
+    str = entries.join(' ')
   end
 
   def all
-    str = all_to_str
-    puts str
+    puts all_to_str
   end
 
   def find(input)
     lowercase_input = input.to_s.downcase
     include?lowercase_input #use enumerable method include? to determine whether input is in the list
   end
+  
+  def clear_list
+    @head = nil
+  end
 
 end
 
 #list = List_Beats.new("Mississippi")
-list = List_Beats.new("Miss I upp all baNG iss yO iPp MA ads ha fewa HA")
+list = List_Beats.new("Miss I upp all baNG iss yO iPp MA ma ads ha fewa HA")
 
-list.append("cHOw kneE Mississippi Ma")
+list.append("cHOw kneE Mississippi Ma ma")
 list.prepend("yES")
 list.prepend("oh")
 list.pop(1)
-#list.prepend("chow knee Mississippi ma")
-list.play
+list.prepend("ching chow knee")
+#list.play
 sorted = list.sort_by do |word| 
   word.length  #use enumerable method sort_by to sort by word length
 end
 puts sorted.inspect
-result = list.find("kee") ? "kee is" : "kee isn't" 
+result = list.find("kee") ? "kee is in the list" : "kee isn't in the list" 
 puts 'list.find("kee") = ' + result #should output "kee isn't"
-result = list.find("knee") ? "knee is" : "knee isn't" 
+result = list.find("knee") ? "knee is in the list" : "knee isn't in the list" 
 puts 'list.find("knee") = ' + result #should output "knee is"
-result = list.include?("kee") ? "kee is" : "kee isn't" 
+result = list.include?("kee") ? "kee is in the list" : "kee isn't in the list" 
 puts 'include?("kee") = ' + result #should output "kee isn't"
-result = list.include?("knee") ? "knee is" : "knee isn't" 
+result = list.include?("knee") ? "knee is in the list" : "knee isn't in the list" 
 puts 'include?("knee") = ' + result #should output "knee is"
+list.all
+list.insert(0,"knee")
+list.insert(1,"how")
+list.insert(5,"na Mississippi ma")
 list.all
 puts list.count
