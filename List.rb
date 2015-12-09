@@ -158,8 +158,12 @@ list.play
 sorted = list.sort_by { |word| word.length }  #use enumerable method sort_by to sort by word length
 puts sorted.inspect
 result = list.find("kee") ? "kee is" : "kee isn't" 
-puts result #should output "kee isn't"
+puts 'list.find("kee") = ' + result #should output "kee isn't"
 result = list.find("knee") ? "knee is" : "knee isn't" 
-puts result #should output "knee is"
+puts 'list.find("knee") = ' + result #should output "knee is"
+result = list.include?("kee") ? "kee is" : "kee isn't" 
+puts 'include?("kee") = ' + result #should output "kee isn't"
+result = list.include?("knee") ? "knee is" : "knee isn't" 
+puts 'include?("knee") = ' + result #should output "knee is"
 list.all
 puts list.count
