@@ -44,9 +44,9 @@ class List_Beats
     for word in words       
       if validate(word)     #process only valid words
         if first_node.nil?
-          last_node = first_node = current = Node.new(word,nil) #when list has only 1 item, the first and last node will be the same
+          last_node = first_node = current = Node.new(word.to_s.downcase,nil) #when list has only 1 item, the first and last node will be the same
         else
-          last_node = current.next_node = Node.new(word,nil)    #keep track of the last node in new list when adding more items
+          last_node = current.next_node = Node.new(word.to_s.downcase,nil)    #keep track of the last node in new list when adding more items
           current = current.next_node                           #increment current position to point to new node in the list
         end
         
@@ -130,13 +130,18 @@ class List_Beats
 
   def all_to_str
     str = ''
-    all?{ |word| str += "#{word} " }
+    all?{ |word| str += "#{word} " }  #make use of all? enumerable method
     str
   end
 
   def all
     str = all_to_str
     puts str
+  end
+
+  def find(input)
+    lowercase_input = input.to_s.downcase
+    include?lowercase_input #use enumerable method include? to determine whether input is in the list
   end
 
 end
@@ -150,8 +155,11 @@ list.prepend("oh")
 list.pop(1)
 #list.prepend("chow knee Mississippi ma")
 list.play
-list.find
-sorted = list.sort_by { |word| word.length }  #sort by word length
+sorted = list.sort_by { |word| word.length }  #use enumerable method sort_by to sort by word length
 puts sorted.inspect
+result = list.find("kee") ? "kee is" : "kee isn't" 
+puts result #should output "kee isn't"
+result = list.find("knee") ? "knee is" : "knee isn't" 
+puts result #should output "knee is"
 list.all
 puts list.count
