@@ -12,12 +12,12 @@ class List_Beats
   include Enumerable
   attr_accessor :voice, :speed
 
+  VALIDBEATS = %W{tee ah dee i deep ya bop boop yo la chow ni ma da na ding oom gai bah knee bang oh uh ha yes}
+
   def initialize(data)
     @voice = 'Boing'
     @speed = 500
     words = data.to_s.split
-
-    @validBeats = %W{tee ah dee i deep ya bop boop yo la chow ni ma da na ding oom gai bah knee bang oh uh ha yes}
     @head = nil
     for word in words
       append(word)    
@@ -124,8 +124,8 @@ class List_Beats
   end
 
   def validate(input)
-    lowercase_input = input.to_s.downcase
-    @validBeats.include?lowercase_input
+    lowercase_input = input.to_s.downcase    
+    VALIDBEATS.include?lowercase_input
   end
 
   def all_to_str
