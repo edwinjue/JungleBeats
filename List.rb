@@ -13,7 +13,6 @@ class List_Beats
   attr_accessor :voice, :speed
 
   def initialize(data)
-    @count = 0
     @voice = 'Boing'
     @speed = 500
     words = data.to_s.split
@@ -24,16 +23,6 @@ class List_Beats
       append(word)    
     end
   end
-=begin  
-  def each
-    if @count
-      words = all_to_str.split
-      for word in words
-        yield word
-      end
-    end
-  end
-=end
 
   def each
     if !@head.nil?                     #if head is nil, the new_list will be the linked list
@@ -46,22 +35,7 @@ class List_Beats
 
     end
   end
-=begin  
-  def count
-    @count = 0
-    current = @head
-    if current.nil?
-      0
-    else
-      while current.next_node != nil
-        @count += 1
-        current = current.next_node
-      end 
-      @count +=1
-      puts @count
-    end
-  end
-=end
+
   #takes a string and converts it into a list
   def string_to_list(str)
     first_node = last_node = current = nil
@@ -75,7 +49,7 @@ class List_Beats
           last_node = current.next_node = Node.new(word,nil)    #keep track of the last node in new list when adding more items
           current = current.next_node                           #increment current position to point to new node in the list
         end
-        @count += 1
+        
       end
     end
 
@@ -120,11 +94,11 @@ class List_Beats
 
   def pop(numToPop)
     current = @head
-    if numToPop > @count  #return nil if trying to pop more nodes than are in list
-      puts "numToPop > @count"
+    if numToPop > count  #return nil if trying to pop more nodes than are in list
+      puts "numToPop > count"
       nil
     else
-      numExisting = @count - numToPop
+      numExisting = count - numToPop
       if numExisting == 0
         @head = nil
       else
