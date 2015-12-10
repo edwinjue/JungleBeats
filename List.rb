@@ -230,13 +230,13 @@ class List_Beats
   def all
     str = ''
     # Travels through the list till you hit the "nil" at the end
-    @current = @head
-    if !@current.nil?
-      while @current.next_node != nil
-        str += @current.data.to_s + " "
-        @current = @current.next_node
+    current = @head
+    if !current.nil?
+      while current.next_node != nil
+        str += current.data.to_s + " "
+        current = current.next_node
       end
-      str += @current.data.to_s
+      str += current.data.to_s
     end
     str
   end
