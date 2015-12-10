@@ -9,7 +9,7 @@ end
 
 class List_Beats
 
-  attr_accessor :voice, :speed
+  attr_reader :voice, :speed
 
   VALIDBEATS = %W{tee ah dee i deep ya bop boop yo la chow ni ma da na ding oom gai bah knee how bang oh uh ha chi yes}
   VALIDVOICES = %W{Alice Boing}
@@ -23,24 +23,30 @@ class List_Beats
     append(data)
   end
 
-  def count
-    count = 0
-    current = @head
-    if current.nil?
+  #custom setter methods for :voice and :speed used to perform validation
+  #validate voice
+  def voice=(new_voice)
+    if VALIDVOICES.include?(new_voice)
+      @voice = new_voice
     else
-      loop do
-        count += 1    
-        if current.next_node.nil?
-          break
-        end
-        current = current.next_node
-      end 
+      raise ArgumentError, "voice: '#{new_voice}'' is not a valid voice. Try: " + VALIDVOICES.inspect
     end
-    count
   end
 
+  #validate speed
+  def speed=(new_speed)
+    if new_speed <=0
+      raise ArgumentError, "speed: '#{new_speed}' is not a valid speed. Try: a value greater than zero"
+    else
+      @speed = speed
+    end
+  end
+
+  #each method used to enumerate linked list data
   def each
-    if !@head.nil?                     #if head is not nil we have a list and can interate. simply iterate and yield data from each node
+    #if head is not nil we have a list and can interate. 
+    #simply iterate and yield data from each node
+    if !@head.nil?                     
       current = @head
       while current.next_node != nil    
          yield current.data
@@ -51,19 +57,24 @@ class List_Beats
     end
   end
 
-  #returns the last node of the current linked list
+  #returns the number of nodes in the linked list
+  def count
+    count = 0
+    each do |data|
+      count += 1
+    end
+  end
+
+  #returns the last node of the linked list
   def tail
     current = @head
-    if current.nil?
-    else
-      while current.next_node != nil
-        current = current.next_node
-      end
+    (count - 1).times do
+      current = current.next_node
     end
     current
   end
 
-  #returns the last node of a specified linked list
+  #returns the last node of a specified list
   def getEnd(list)
     if list.nil?
     else
@@ -74,7 +85,7 @@ class List_Beats
     list
   end
 
-  #returns the node at the given index for the current list
+  #returns the node at the given index for the linked list
   def atIndex(index)
     current = @head
     (index).times do
@@ -84,74 +95,82 @@ class List_Beats
     current
   end
 
+  #returns true if the specified word is in the linked list
   def include?(word)
-    current = @head
-    if current.nil?
-    else
-      loop do
-        if word.downcase == current.data.downcase
+    if !@head.nil?
+      each do |data|
+        if data.to_s.downcase == word.downcase
           return true
-        end
-        if current.next_node.nil?
-          break
-        end
-        current = current.next_node
-      end 
+        end    
+      end
     end
     false
   end
 
+  #alias for include?
   def find(word)
     include?word
   end
 
   #takes a string and converts it into a list
   def string_to_list(str)
-    first_node = last_node = current = nil
+    first_node = current = nil
 
-    words = str.to_s.split  #convert string to an array of words  
+    #convert input string to an array of words  
+    words = str.to_s.split  
+    
+    #create a node for each word in the array
     words.each do |word|
-      if validate(word)     #process only valid words
+      #process only valid words
+      if validate(word)     
         if first_node.nil?
-          last_node = first_node = current = Node.new(word.to_s.downcase,nil) #when list has only 1 item, the first and last node will be the same
+          #no list yet, create first_node
+          first_node = current = Node.new(word.to_s.downcase.strip,nil) 
         else
-          last_node = current.next_node = Node.new(word.to_s.downcase,nil)    #keep track of the last node in new list when adding more items
-          current = current.next_node                           #increment current position to point to new node in the list
+          #add and connect a new node
+          current.next_node = Node.new(word.to_s.downcase.strip,nil)    
+          current = current.next_node                           
         end  
       end
     end
 
-    first_node.nil? ? nil : first_node   #return nil if no valid words were processed, otherwise, return first node of the newly created list
+    #return first node of list or nil if no valid words
+    first_node
   end
 
   def append(add_end)  
-    new_list = string_to_list(add_end)  #create a new list with the words in add_end    
+    #create a new list with the words in add_end    
+    new_list = string_to_list(add_end)  
 
-    if @head.nil?                     #if head is nil, the new_list will be the linked list
+    if @head.nil?
+      #if head is nil, the new_list will be the linked list
       @head = new_list  
     else
-      current = @head
-      while current.next_node != nil    #go to the last Node in the list
-         current = current.next_node
-      end
-      current.next_node = new_list      #append new list to the existing linked list
+      #go to the last Node in the list
+      current = tail
+
+      #append new list to end of the linked list
+      current.next_node = new_list
     end
   end
 
   def prepend(add_begining)
     new_list = string_to_list(add_begining) #create a new list with the words in add_begining    
 
-    if @head.nil?                         #if head is nil, the new_list will be the linked list
+    if @head.nil?                         
+      #if head is nil, the new_list will be the linked list
       @head = new_list  
     else
-      current = new_list                    #go to end of new list
-      while current.next_node != nil
-        current = current.next_node
-      end
-
-      current.next_node = @head             #attach the new list to the head of existing linked list
+      current = new_list                    
       
-      @head = new_list                      #update the head of the existing linked list to point to first node of prepended list 
+      #go to end of new list
+      new_list_end = getEnd(new_list)
+
+      #attach end of new list to the head of the linked list
+      new_list_end.next_node = @head             
+      
+      #update the head to point to first node of new list 
+      @head = new_list                      
     end
   end
 
@@ -229,23 +248,20 @@ class List_Beats
 
   def all
     str = ''
-    # Travels through the list till you hit the "nil" at the end
-    current = @head
-    if !current.nil?
-      while current.next_node != nil
-        str += current.data.to_s + " "
-        current = current.next_node
-      end
-      str += current.data.to_s
+    each do |data|
+      str += data.to_s + ' '
     end
-    str
+    str.strip
   end
+
 end
+
 =begin
 list = List_Beats.new("Miss I upp all baNG iss yO iPp MA ma ads ha fewa HA")
 list.append("cHOw kneE Mississippi Ma ma")
 list.prepend("yES")
 list.prepend("oh")
+list.voice = "Alice"
 list.pop(1)
 list.prepend("ching chow knee")
 list.play
@@ -253,6 +269,7 @@ puts list.all
 list.insert(0,"knee")
 puts list.all
 list.insert(1,"how")
+#list.speed = -1
 puts list.all
 list.insert(5,"na Mississippi ma")
 puts list.all
