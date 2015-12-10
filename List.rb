@@ -85,6 +85,25 @@ class List_Beats
     current
   end
 
+  def include?(word)
+    current = @head
+    if current.nil?
+      nil
+    else
+      while current.next_node != nil
+        if word.downcase == current.data.downcase
+          return true
+        end
+        current = current.next_node
+      end
+      return false
+    end
+  end
+
+  def find(word)
+    include?word
+  end
+
   #takes a string and converts it into a list
   def string_to_list(str)
     first_node = last_node = current = nil
@@ -239,6 +258,14 @@ list.insert(1,"how")
 puts list.all
 list.insert(5,"na Mississippi ma")
 puts list.all
+result = list.include?"chow"
+puts "is chow included in the list? list.include?\"chow\" = " + result.to_s
+result = list.include?"notInList"
+puts "is notInList included in the list? list.include?\"notInList\" = " + result.to_s
+result = list.find("chow")
+puts "is chow found in the list? list.find(\"chow\") = " + result.to_s
+result = list.find("notInList")
+puts "is notInList found in the list? list.find(\"notInList\") = " + result.to_s
 last_node = list.tail
 puts "last_node.data = " + last_node.data
 puts list.all
