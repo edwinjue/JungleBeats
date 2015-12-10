@@ -23,7 +23,7 @@ class JungleBeatsTest < Minitest::Test
     assert list.insert(0,"ma chow knee")
   end
 
-  def test_returns_nil_for_invalid_sound_with_new_object
+  def test_returns_count_0_for_invalid_sound_with_new_object
     list = List_Beats.new("SomeInvalidSound")
     assert_equal 0, list.count
   end

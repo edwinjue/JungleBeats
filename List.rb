@@ -17,13 +17,14 @@ class List_Beats
   DEFAULT_SPEED = 500
 
   def initialize(data)
+    @head = nil
     @voice = DEFAULT_VOICE
     @speed = DEFAULT_SPEED
-    @head = nil
     append(data)
   end
 
   #custom setter methods for :voice and :speed used to perform validation
+  
   #validate voice
   def voice=(new_voice)
     if VALIDVOICES.include?(new_voice)
@@ -38,7 +39,7 @@ class List_Beats
     if new_speed <=0
       raise ArgumentError, "speed: '#{new_speed}' is not a valid speed. Try: a value greater than zero"
     else
-      @speed = speed
+      @speed = new_speed
     end
   end
 
@@ -63,6 +64,7 @@ class List_Beats
     each do |data|
       count += 1
     end
+    count
   end
 
   #returns the last node of the linked list
@@ -255,16 +257,22 @@ class List_Beats
   end
 
 end
-
 =begin
+puts List_Beats::VALIDBEATS.inspect
+#list = List_Beats.new("Invalid")
+#puts list.inspect
 list = List_Beats.new("Miss I upp all baNG iss yO iPp MA ma ads ha fewa HA")
+puts list.all
 list.append("cHOw kneE Mississippi Ma ma")
+puts list.all
 list.prepend("yES")
+puts list.all
 list.prepend("oh")
+puts list.all
 list.voice = "Alice"
 list.pop(1)
 list.prepend("ching chow knee")
-list.play
+#list.play
 puts list.all
 list.insert(0,"knee")
 puts list.all
