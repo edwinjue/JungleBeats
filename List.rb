@@ -17,7 +17,6 @@ class List_Beats
   DEFAULT_SPEED = 500
 
   def initialize(data)
-    @count = 0
     @voice = DEFAULT_VOICE
     @speed = DEFAULT_SPEED
     @head = nil
@@ -25,17 +24,17 @@ class List_Beats
   end
 
   def count
-    @count = 0
+    count = 0
     @current = @head
     if @current.nil?
       0
     else
       while @current.next_node != nil
-        @count += 1
+        count += 1
         @current = @current.next_node
       end
-      @count +=1
-      @count
+      count +=1
+      count
     end
   end
 
