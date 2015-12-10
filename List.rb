@@ -1,7 +1,7 @@
 class Node
   attr_accessor :data, :next_node
 
-  def initialize(data, next_up)
+  def initialize(data = nil, next_up = nil)
     @data = data
     @next_node = next_up
   end
@@ -101,6 +101,11 @@ class List_Beats
         end
         current = current.next_node
       end
+      #handle last node
+      if word.downcase == current.data.downcase
+          return true
+      end
+
       return false
     end
   end
@@ -278,6 +283,8 @@ puts list.all
 puts list.count
 =end
 list = List_Beats.new("bang")
-list.append("boom boom la chi dop dop de bang la chi")
-puts list.all
-puts list.pop(3)
+    list.append("lo chow madar")
+    list.prepend("deep dep")
+    puts list.all
+    puts list.include?"chow"
+    puts list.find("chow")

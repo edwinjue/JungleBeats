@@ -45,77 +45,69 @@ class JungleBeatsTest < Minitest::Test
   end
 
   def test_count_keeps_track_of_current_size_of_node
-    skip
     list = List_Beats.new("bang")
     list.append("bang boom la")
     list.prepend("chi ni ma ding")
-    assert_equal 8, list.count
+    assert_equal 7, list.count
   end
 
 
   def test_returns_all_elements_in_the_linked_list
-    skip
     list = List_Beats.new("bang")
     list.append("bang boom la")
     list.prepend("chi ni ma ding")
-    assert_equal "chi ni ma ding bang bang boom la", list.all
+    assert_equal "chi ni ma ding bang bang la", list.all
   end
 
   def test_resets_to_orginal_voice_speed
-    skip
     list = List_Beats.new("bang")
+    list.speed = 100
     assert_equal 500, list.reset_speed
   end
 
   def test_allows_to_set_custom_voice_speed
-    skip
     list = List_Beats.new("bang")
-    list.speed(100)
+    list.speed = 100
     assert_equal 100, list.speed
   end
 
   def test_returns_voice_to_defult_Boing_
-    skip
     list = List_Beats.new("bang")
+    list.voice = 'Alice'
     assert_equal 'Boing', list.reset_voice
   end
 
   def test_allows_to_set_custom_voice
-    skip
     list = List_Beats.new("bang")
-    list.set_voice("Alice")
+    list.voice = "Alice"
     assert_equal "Alice", list.voice
   end
 
-  def test_find_number_of_specific_words_in_link
-    skip
+  def test_find_word_in_link
     list = List_Beats.new("bang")
     list.append("lo chow madar")
     list.prepend("deep dep")
-    assert_equal 1, list.find("chow madar")
+    assert list.find("chow")
   end
 
   def test_allows_for_capitalize_or_upcase_words
-    skip
     list = List_Beats.new("BANG")
     assert_equal 1, list.count
   end
 
   def test_refutes_non_authorized_words
-    skip
     list = List_Beats.new("bang junk junk junk")
     assert_equal 1, list.count
   end
 
-  def test_node_equals_nil
-    skip
-    node = Node.new("Hello")
-    assert_equal nil, node
+  def test_invalid_parameter_in_constructor_yields_count_0
+    list = List_Beats.new("Hello")
+    assert_equal 0, list.count
   end
 
-  def test_if_only_one_link_refute_insert_5
-    skip
+  def test_if_only_one_node_insert_5_will_append
     list = List_Beats.new("bang")
-    refute list.insert(5,"ma")
+    list.insert(5,"ma")
+    assert_equal "bang ma", list.all
   end
 end
