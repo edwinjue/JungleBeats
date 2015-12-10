@@ -27,7 +27,6 @@ class List_Beats
     count = 0
     current = @head
     if current.nil?
-      0
     else
       loop do
         count += 1    
@@ -36,8 +35,8 @@ class List_Beats
         end
         current = current.next_node
       end 
-      count
     end
+    count
   end
 
   def each
@@ -56,25 +55,23 @@ class List_Beats
   def tail
     current = @head
     if current.nil?
-      nil
     else
       while current.next_node != nil
         current = current.next_node
       end
-      current
     end
+    current
   end
 
   #returns the last node of a specified linked list
   def getEnd(list)
     if list.nil?
-      nil
     else
       while list.next_node != nil
         list = list.next_node
-      end
-      list
+      end      
     end
+    list
   end
 
   #returns the node at the given index for the current list
@@ -90,7 +87,6 @@ class List_Beats
   def include?(word)
     current = @head
     if current.nil?
-      nil
     else
       loop do
         if word.downcase == current.data.downcase
@@ -102,6 +98,7 @@ class List_Beats
         current = current.next_node
       end 
     end
+    false
   end
 
   def find(word)
@@ -208,12 +205,10 @@ class List_Beats
   end
 
   def play
-    str = all
-    if str
-      sayWithSpeedAndVoice = "say -r #{@speed} -v #{@voice} \"#{str}\""
-#     puts sayWithSpeedAndVoice
+    if count
+      sayWithSpeedAndVoice = "say -r #{@speed} -v #{@voice} \"" + all + "\""
       `#{sayWithSpeedAndVoice}`
-      
+     
 #     sayCmd = "say \"#{str}\""
 #     `#{sayCmd}`
     end
