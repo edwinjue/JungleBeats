@@ -241,7 +241,7 @@ class List_Beats
     str
   end
 end
-
+=begin
 list = List_Beats.new("Miss I upp all baNG iss yO iPp MA ma ads ha fewa HA")
 list.append("cHOw kneE Mississippi Ma ma")
 list.prepend("yES")
@@ -268,4 +268,4 @@ last_node = list.tail
 puts "last_node.data = " + last_node.data
 puts list.all
 puts list.count
-
+=end
