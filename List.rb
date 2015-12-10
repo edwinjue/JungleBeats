@@ -25,13 +25,13 @@ class List_Beats
 
   def count
     count = 0
-    @current = @head
+    current = @head
     if @current.nil?
       0
     else
-      while @current.next_node != nil
+      while current.next_node != nil
         count += 1
-        @current = @current.next_node
+        current = current.next_node
       end
       count +=1
       count
