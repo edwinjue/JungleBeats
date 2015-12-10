@@ -8,7 +8,7 @@ class Node
 end
 
 class List_Beats
-  #include Enumerable
+
   attr_accessor :voice, :speed
 
   VALIDBEATS = %W{tee ah dee i deep ya bop boop yo la chow ni ma da na ding oom gai bah knee how bang oh uh ha yes}
@@ -76,6 +76,16 @@ class List_Beats
     end
   end
 
+  #returns the node at the given index for the current list
+  def atIndex(index)
+    current = @head
+    (index).times do
+      current = current.next_node
+    end
+    #puts "current.data at index #{index} is #{current.data}"
+    current
+  end
+
   #takes a string and converts it into a list
   def string_to_list(str)
     first_node = last_node = current = nil
@@ -124,15 +134,6 @@ class List_Beats
       
       @head = new_list                      #update the head of the existing linked list to point to first node of prepended list 
     end
-  end
-
-  def atIndex(index)
-    current = @head
-    (index).times do
-      current = current.next_node
-    end
-    #puts "current.data at index #{index} is #{current.data}"
-    current
   end
 
   def insert(index,add_words)
