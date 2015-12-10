@@ -26,7 +26,7 @@ class List_Beats
   def count
     count = 0
     current = @head
-    if @current.nil?
+    if current.nil?
       0
     else
       while current.next_node != nil
