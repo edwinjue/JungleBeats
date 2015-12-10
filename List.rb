@@ -8,7 +8,7 @@ class Node
 end
 
 class List_Beats
-  include Enumerable
+  #include Enumerable
   attr_accessor :voice, :speed
 
   VALIDBEATS = %W{tee ah dee i deep ya bop boop yo la chow ni ma da na ding oom gai bah knee how bang oh uh ha yes}
@@ -17,10 +17,26 @@ class List_Beats
   DEFAULT_SPEED = 500
 
   def initialize(data)
+    @count = 0
     @voice = DEFAULT_VOICE
     @speed = DEFAULT_SPEED
     @head = nil
     append(data)
+  end
+
+  def count
+    @count = 0
+    @current = @head
+    if @current.nil?
+      0
+    else
+      while @current.next_node != nil
+        @count += 1
+        @current = @current.next_node
+      end
+      @count +=1
+      @count
+    end
   end
 
   def each
@@ -32,6 +48,31 @@ class List_Beats
       end
       yield current.data
 
+    end
+  end
+
+  #returns the last node of the current linked list
+  def tail
+    current = @head
+    if current.nil?
+      nil
+    else
+      while current.next_node != nil
+        current = current.next_node
+      end
+      current
+    end
+  end
+
+  #returns the last node of a specified linked list
+  def getEnd(list)
+    if list.nil?
+      nil
+    else
+      while list.next_node != nil
+        list = list.next_node
+      end
+      list
     end
   end
 
@@ -85,6 +126,15 @@ class List_Beats
     end
   end
 
+  def atIndex(index)
+    current = @head
+    (index).times do
+      current = current.next_node
+    end
+    #puts "current.data at index #{index} is #{current.data}"
+    current
+  end
+
   def insert(index,add_words)
     if index >= count
       puts "Inserting \'#{add_words}\' to the end of list"
@@ -93,11 +143,25 @@ class List_Beats
       puts "Inserting \'#{add_words}\' to the beginning of list"  
       prepend(add_words)
     else
-      #insert between nodes (simply reconstruct list)
-      ar = to_a
-      ar.insert(index,add_words)
-      clear_list
-      append(ar.join(' '))
+      #generate a list from add_words
+      new_list = string_to_list(add_words)
+      
+      #get node before index, call it indexNode
+      indexNode = atIndex(index-1)  
+      
+      #get node at index, call it afterIndexNode
+      afterIndexNode = atIndex(index)
+
+      #connect indexNode to the new list
+      indexNode.next_node = new_list    
+
+      #get the last node of the new list
+      new_list_end = getEnd(new_list)
+
+      #connect end of new list to afterIndexNode
+      new_list_end.next_node = afterIndexNode
+      
+      puts "Inserting \'#{add_words}\' to index #{index}"  
     end
   end
 
@@ -120,7 +184,7 @@ class List_Beats
   end
 
   def play
-    str = all_to_str
+    str = all
     if str
       sayWithSpeedAndVoice = "say -r #{@speed} -v #{@voice} \"#{str}\""
 #     puts sayWithSpeedAndVoice
@@ -144,23 +208,19 @@ class List_Beats
     VALIDBEATS.include?lowercase_input
   end
 
-  def all_to_str
-    str = entries.join(' ')
-  end
-
   def all
-    puts all_to_str
+    str = ''
+    # Travels through the list till you hit the "nil" at the end
+    @current = @head
+    if !@current.nil?
+      while @current.next_node != nil
+        str += @current.data.to_s + " "
+        @current = @current.next_node
+      end
+      str += @current.data.to_s
+    end
+    str
   end
-
-  def find(input)
-    lowercase_input = input.to_s.downcase
-    include?lowercase_input #use enumerable method include? to determine whether input is in the list
-  end
-  
-  def clear_list
-    @head = nil
-  end
-
 end
 
 #list = List_Beats.new("Mississippi")
@@ -171,22 +231,15 @@ list.prepend("yES")
 list.prepend("oh")
 list.pop(1)
 list.prepend("ching chow knee")
-#list.play
-sorted = list.sort_by do |word| 
-  word.length  #use enumerable method sort_by to sort by word length
-end
-puts sorted.inspect
-result = list.find("kee") ? "kee is in the list" : "kee isn't in the list" 
-puts 'list.find("kee") = ' + result #should output "kee isn't"
-result = list.find("knee") ? "knee is in the list" : "knee isn't in the list" 
-puts 'list.find("knee") = ' + result #should output "knee is"
-result = list.include?("kee") ? "kee is in the list" : "kee isn't in the list" 
-puts 'include?("kee") = ' + result #should output "kee isn't"
-result = list.include?("knee") ? "knee is in the list" : "knee isn't in the list" 
-puts 'include?("knee") = ' + result #should output "knee is"
-list.all
+list.play
+puts list.all
 list.insert(0,"knee")
+puts list.all
 list.insert(1,"how")
+puts list.all
 list.insert(5,"na Mississippi ma")
-list.all
+puts list.all
+last_node = list.tail
+puts "last_node.data = " + last_node.data
+puts list.all
 puts list.count
