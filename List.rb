@@ -29,11 +29,13 @@ class List_Beats
     if current.nil?
       0
     else
-      while current.next_node != nil
-        count += 1
+      loop do
+        count += 1    
+        if current.next_node.nil?
+          break
+        end
         current = current.next_node
-      end
-      count +=1
+      end 
       count
     end
   end
@@ -245,8 +247,6 @@ class List_Beats
   end
 end
 
-#list = List_Beats.new("Mississippi")
-=begin
 list = List_Beats.new("Miss I upp all baNG iss yO iPp MA ma ads ha fewa HA")
 list.append("cHOw kneE Mississippi Ma ma")
 list.prepend("yES")
@@ -273,4 +273,4 @@ last_node = list.tail
 puts "last_node.data = " + last_node.data
 puts list.all
 puts list.count
-=end
+
