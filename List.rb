@@ -11,7 +11,7 @@ class List_Beats
 
   attr_accessor :voice, :speed
 
-  VALIDBEATS = %W{tee ah dee i deep ya bop boop yo la chow ni ma da na ding oom gai bah knee how bang oh uh ha yes}
+  VALIDBEATS = %W{tee ah dee i deep ya bop boop yo la chow ni ma da na ding oom gai bah knee how bang oh uh ha chi yes}
   VALIDVOICES = %W{Alice Boing}
   DEFAULT_VOICE = 'Boing'
   DEFAULT_SPEED = 500
@@ -90,6 +90,11 @@ class List_Beats
     if current.nil?
       nil
     else
+      #handle 1 node case
+      if word.downcase == current.data.downcase
+          return true
+      end
+      #we have more than 1 node
       while current.next_node != nil
         if word.downcase == current.data.downcase
           return true
@@ -156,10 +161,10 @@ class List_Beats
 
   def insert(index,add_words)
     if index >= count
-      puts "Inserting \'#{add_words}\' to the end of list"
+      #puts "Inserting \'#{add_words}\' to the end of list"
       append(add_words)
     elsif index <= 0
-      puts "Inserting \'#{add_words}\' to the beginning of list"  
+      #puts "Inserting \'#{add_words}\' to the beginning of list"  
       prepend(add_words)
     else
       #generate a list from add_words
@@ -180,7 +185,7 @@ class List_Beats
       #connect end of new list to afterIndexNode
       new_list_end.next_node = afterIndexNode
       
-      puts "Inserting \'#{add_words}\' to index #{index}"  
+      #puts "Inserting \'#{add_words}\' to index #{index}"  
     end
   end
 
@@ -200,6 +205,7 @@ class List_Beats
         current.next_node = nil
       end
     end
+    all
   end
 
   def play
@@ -243,8 +249,8 @@ class List_Beats
 end
 
 #list = List_Beats.new("Mississippi")
+=begin
 list = List_Beats.new("Miss I upp all baNG iss yO iPp MA ma ads ha fewa HA")
-
 list.append("cHOw kneE Mississippi Ma ma")
 list.prepend("yES")
 list.prepend("oh")
@@ -270,3 +276,8 @@ last_node = list.tail
 puts "last_node.data = " + last_node.data
 puts list.all
 puts list.count
+=end
+list = List_Beats.new("bang")
+list.append("boom boom la chi dop dop de bang la chi")
+puts list.all
+puts list.pop(3)
