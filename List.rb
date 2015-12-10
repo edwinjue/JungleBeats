@@ -90,23 +90,15 @@ class List_Beats
     if current.nil?
       nil
     else
-      #handle 1 node case
-      if word.downcase == current.data.downcase
-          return true
-      end
-      #we have more than 1 node
-      while current.next_node != nil
+      loop do
         if word.downcase == current.data.downcase
           return true
         end
+        if current.next_node.nil?
+          break
+        end
         current = current.next_node
-      end
-      #handle last node
-      if word.downcase == current.data.downcase
-          return true
-      end
-
-      return false
+      end 
     end
   end
 
@@ -282,9 +274,3 @@ puts "last_node.data = " + last_node.data
 puts list.all
 puts list.count
 =end
-list = List_Beats.new("bang")
-    list.append("lo chow madar")
-    list.prepend("deep dep")
-    puts list.all
-    puts list.include?"chow"
-    puts list.find("chow")
